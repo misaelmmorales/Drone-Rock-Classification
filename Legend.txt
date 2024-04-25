@@ -1,0 +1,23 @@
+The file of interest is called img_ooi
+where i is the number of the imgaeg
+
+Classes
+
+A_i is the matrix containg the i mask
+In is the grey scale image
+rgb is the rgb image
+AA is the sum of the masks (uint8)
+AAA is the sum of the masks (double2)
+
+
+0 Background
+1 Sandstone type 1 
+2 Shaly Rock
+3 Sandstone type 2 
+4 Carbonate 
+5 Shale
+6 Sandstone type 3
+10 box
+
+
+30
