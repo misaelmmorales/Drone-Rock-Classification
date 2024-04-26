@@ -1,5 +1,5 @@
 ############################################################################
-#     Deep learning-based rock classification from core image obtained     #
+#    Deep learning-based rock classification from core samples obtained    #
 #                    from high-resolution drone imagery                    #
 ############################################################################
 # Author: Domenico M. Crisafulli (github.com/dmc1095)                      #
@@ -19,9 +19,18 @@
 # limitations under the License.                                           #
 ############################################################################
 
+import os
 import numpy as np
 import pandas as pd
+from scipy.io import loadmat
+
 import matplotlib.pyplot as plt
+from matplotlib.gridspec import GridSpec
+from matplotlib.colors import LinearSegmentedColormap, ListedColormap
+
+import torch
+from torch import nn
+
 
 
 ############################################################################
