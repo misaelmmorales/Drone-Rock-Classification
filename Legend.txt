@@ -1,5 +1,5 @@
-The file of interest is called img_ooi
-where i is the number of the imgaeg
+The file of interest is called img_00i
+where i is the number of the imgae
 
 Classes
 
@@ -9,7 +9,6 @@ rgb is the rgb image
 AA is the sum of the masks (uint8)
 AAA is the sum of the masks (double2)
 
-
 0 Background
 1 Sandstone type 1 
 2 Shaly Rock
@@ -18,6 +17,5 @@ AAA is the sum of the masks (double2)
 5 Shale
 6 Sandstone type 3
 10 box
-
 
 30
