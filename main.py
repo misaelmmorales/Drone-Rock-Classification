@@ -99,12 +99,14 @@ class CustomDataset(Dataset):
         if self.transform is not None:
             input_img, output_img = self.transform(input_img), self.transform(output_img)
 
-        return input_img, output_img
+        return input_img.to(device), output_img.to(device)
 
 ##################################################
 ################# MAIN FUNCTION ##################
 ##################################################
 if __name__ == '__main__':
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
     dataset = CustomDataset(input_dir='data/x_images', output_dir='data/y_images', transform=None)
 
     train_percent    = 0.8
@@ -116,8 +118,8 @@ if __name__ == '__main__':
     valid_loader = DataLoader(x_valid, batch_size=batch_size, shuffle=True)
     test_loader  = DataLoader(x_test,  batch_size=batch_size, shuffle=True)
 
-    model     = RockClassification()
-    criterion = nn.L1Loss()
+    model     = RockClassification().to(device)
+    criterion = nn.L1Loss().to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 
     epochs, monitor = 100, 10
