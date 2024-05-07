@@ -1,6 +1,6 @@
 ############################################################################
-#    Deep learning-based rock classification from core samples obtained    #
-#                    from high-resolution drone imagery                    #
+#    Deep learning-based automated rock classification via high-resolution #
+#                    drone-captured core sample imagery                    #
 ############################################################################
 # Author: Domenico M. Crisafulli (github.com/dmc1095)                      #
 # Co-author: Misael M. Morales (github.com/misaelmmorales)                 #
@@ -27,6 +27,19 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, Dataset, random_split
 import torchvision.transforms.v2 as Transforms
+
+def check_torch():
+    '''
+    Check if Torch is successfully built with GPU support
+    '''
+    torch_version, cuda_avail = torch.__version__, torch.cuda.is_available()
+    count, name = torch.cuda.device_count(), torch.cuda.get_device_name()
+    print('\n'+'-'*60)
+    print('----------------------- VERSION INFO -----------------------')
+    print('Torch version: {} | Torch Built with CUDA? {}'.format(torch_version, cuda_avail))
+    print('# Device(s) available: {}, Name(s): {}'.format(count, name))
+    print('-'*60+'\n')
+    return None
 
 ##################################################
 ########### ROCK CLASSIFICATION MODEL ############
