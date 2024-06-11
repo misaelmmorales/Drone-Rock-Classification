@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #SBATCH -J DronRockClass # Job name
-#SBATCH -o out.%j        # Name of stdout output file
-#SBATCH -e err.%j        # Name of stderr error file
+#SBATCH -o %j.out        # Name of stdout output file
+#SBATCH -e %j.err        # Name of stderr error file
 #SBATCH -p gpu-a100      # Queue (partition) name
 #SBATCH -N 1             # Total # of nodes (must be 1 for serial)
 #SBATCH -n 1             # Total # of mpi tasks (should be 1 for serial)
