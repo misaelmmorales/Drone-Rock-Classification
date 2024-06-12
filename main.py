@@ -170,8 +170,8 @@ class DroneRockClass:
         self.patch_reconstruct = PatchReconstruct()
 
         self.model     = RockClassification().to(self.device)
-        self.criterion = nn.CrossEntropyLoss().to(self.device)
-        self.optimzier = torch.optim.Adam(self.model.parameters(), lr=0.001)
+        self.criterion = nn.L1Loss().to(self.device)
+        self.optimizer = torch.optim.Adam(self.model.parameters(), lr=-3)
 
     def load_data(self, train_percent=0.8, batch_size:int=32):
         self.dataset = CustomDataset(self.input_dir, self.output_dir, transform=self.patch_transform)
@@ -181,6 +181,7 @@ class DroneRockClass:
         self.valid_loader = DataLoader(valid, batch_size=batch_size, shuffle=True)
         self.test_loader = DataLoader(test, batch_size=batch_size, shuffle=True)
         self.all_loader = DataLoader(self.dataset, batch_size=10, shuffle=False)
+        return None
 
     def train_model(self, epochs:int=301, monitor:int=10):
         train_loss, valid_loss = [], []
@@ -227,6 +228,7 @@ class DroneRockClass:
             for j in range(yout.size(0)):
                 np.save('data/y_predictions/pimg_{}.npy'.format(k), yout[j].squeeze().cpu().numpy())
                 k += 1
+        return None
 
 ##################################################
 ################# MAIN FUNCTION ##################
