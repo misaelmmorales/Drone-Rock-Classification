@@ -179,7 +179,7 @@ class DroneRockClass:
 
         self.model     = RockClassification().to(self.device)
         self.criterion = nn.CrossEntropyLoss().to(self.device)
-        self.optimizer = torch.optim.AdamW(self.model.parameters(), lr=-3, weight_decay=1e-5)
+        self.optimizer = torch.optim.AdamW(self.model.parameters(), lr=-3, weight_decay=1e-8)
 
     def load_data(self, train_percent=0.8, batch_size:int=32):
         self.dataset = CustomDataset(self.input_dir, self.output_dir, transform=self.patch_transform)
