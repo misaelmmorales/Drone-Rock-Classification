@@ -29,19 +29,27 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, Dataset, random_split
 
-def check_torch():
-    '''
-    Check if Torch is successfully built with GPU support
-    '''
-    torch_version, cuda_avail = torch.__version__, torch.cuda.is_available()
-    count, name = torch.cuda.device_count(), torch.cuda.get_device_name()
-    device = torch.device('cuda' if cuda_avail else 'cpu')
-    print('\n'+'-'*60)
-    print('----------------------- VERSION INFO -----------------------')
-    print('Torch version: {} | Torch Built with CUDA? {}'.format(torch_version, cuda_avail))
-    print('# Device(s) available: {}, Name(s): {}'.format(count, name))
-    print('-'*60+'\n')
-    return device
+def check_torch(verbose:bool=True):
+    if torch.cuda.is_available():
+        torch_version, cuda_avail = torch.__version__, torch.cuda.is_available()
+        count, name = torch.cuda.device_count(), torch.cuda.get_device_name()
+        if verbose:
+            print('-'*60)
+            print('----------------------- VERSION INFO -----------------------')
+            print('Torch version: {} | Torch Built with CUDA? {}'.format(torch_version, cuda_avail))
+            print('# Device(s) available: {}, Name(s): {}'.format(count, name))
+            print('-'*60)
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        return device
+    else:
+        torch_version, cuda_avail = torch.__version__, torch.cuda.is_available()
+        if verbose:
+            print('-'*60)
+            print('----------------------- VERSION INFO -----------------------')
+            print('Torch version: {} | Torch Built with CUDA? {}'.format(torch_version, cuda_avail))
+            print('-'*60)
+        device = torch.device('cpu')
+        return device
 
 ##################################################
 ########### ROCK CLASSIFICATION MODEL ############
