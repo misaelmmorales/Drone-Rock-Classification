@@ -1,0 +1,4 @@
+paper/*
+data/x_images.npy
+data/y_images.npy
+rockClassification.weights.h5

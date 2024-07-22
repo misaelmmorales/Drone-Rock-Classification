@@ -22,8 +22,11 @@
 import os, time
 import numpy as np
 import pandas as pd
-from tqdm import tqdm
 import matplotlib.pyplot as plt
+
+from tqdm import tqdm
+from PIL import Image
+from scipy.io import loadmat
 
 import torch
 import torch.nn as nn
@@ -183,12 +186,12 @@ class DroneRockClass:
 
     def load_data(self, train_percent=0.8, batch_size:int=32):
         self.dataset = CustomDataset(self.input_dir, self.output_dir, transform=self.patch_transform)
-        train, test = random_split(self.dataset, [int(train_percent*len(self.dataset)), len(self.dataset)-int(train_percent*len(self.dataset))])
+        train, test  = random_split(self.dataset, [int(train_percent*len(self.dataset)), len(self.dataset)-int(train_percent*len(self.dataset))])
         train, valid = random_split(train, [int(train_percent*len(train)), len(train)-int(train_percent*len(train))])
         self.train_loader = DataLoader(train, batch_size=batch_size, shuffle=True)
         self.valid_loader = DataLoader(valid, batch_size=batch_size, shuffle=True)
-        self.test_loader = DataLoader(test, batch_size=batch_size, shuffle=True)
-        self.all_loader = DataLoader(self.dataset, batch_size=10, shuffle=False)
+        self.test_loader  = DataLoader(test, batch_size=batch_size, shuffle=True)
+        self.all_loader   = DataLoader(self.dataset, batch_size=10, shuffle=False)
         return None
 
     def train_model(self, epochs:int=301, monitor:int=10):

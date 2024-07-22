@@ -1,0 +1,17 @@
+https://www.akshaymakes.com/blogs/vision-transformer
+
+MaskFormer for image segmentation:
+https://huggingface.co/docs/transformers/en/model_doc/maskformer
+
+https://huggingface.co/docs/transformers/model_doc/swin
+https://huggingface.co/facebook?search_models=mask2former-swin-base
+https://huggingface.co/facebook/mask2former-swin-base-ade-semantic
+
+https://huggingface.co/Matthijs/deeplabv3-mobilevit-small
+https://github.com/VainF/DeepLabV3Plus-Pytorch/blob/master/network/modeling.py
+
+Keras models:
+https://keras.io/examples/vision/segformer/
+https://keras.io/examples/vision/deeplabv3_plus/
+https://keras.io/examples/vision/sam/
+https://keras.io/api/applications/resnet/

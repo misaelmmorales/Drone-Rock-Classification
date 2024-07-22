@@ -22,6 +22,8 @@
 import os
 import numpy as np
 from scipy.io import loadmat
+import torch
+from tqdm import tqdm
 
 '''
 Save masked images and masks to disk.
@@ -57,3 +59,61 @@ for i in range(len(subimgs)):
 ############################################################################
 ################################### END ####################################
 ############################################################################
+
+class PatchTransform:
+    def __init__(self, patch_w:int=6, patch_h:int=8):
+        self.patch_w = patch_w
+        self.patch_h = patch_h
+
+    def __call__(self, img):
+        img = torch.tensor(img, dtype=torch.float32).view(1, 1, img.shape[-2], img.shape[-1])
+        sw = img.shape[-2] // self.patch_w
+        sh = img.shape[-1] // self.patch_h
+        patches = img.unfold(-2, sw, sw).unfold(-2, sh, sh).reshape(-1, 1, sw, sh)
+        return patches
+    
+class PatchNonzeroFilter:
+    def __init__(self, background_class:int=0, verbose:bool=False):
+        self.background = background_class
+        self.verbose = verbose
+    
+    def __call__(self, ximg, yimg):
+        xmask = torch.sum(ximg, dim=(-3,-2,-1)) != self.background
+        xfilt = ximg[xmask]
+        ymask = torch.sum(yimg, dim=(-3,-2,-1)) != self.background
+        yfilt = yimg[ymask]
+        if xfilt.shape[0] != yfilt.shape[0]:
+            print('Warning: Input and Output shapes do not match | Filtering with smaller mask...') if self.verbose else None
+            mask = ymask if xfilt.shape[0] > yfilt.shape[0] else xmask
+        else:
+            mask = xmask
+        return ximg[mask].squeeze(), yimg[mask].squeeze()
+    
+patch_transform = PatchTransform(patch_w=6, patch_h=8)
+nonzero_filter = PatchNonzeroFilter()
+nimgs = len(os.listdir('data/x_images'))
+
+all_x_imgs = []
+all_y_imgs = []
+for i in tqdm(range(nimgs), desc='Processing Images', unit='image'):
+    ximg = np.load('data/x_images/img_{}.npy'.format(i))
+    yimg = np.load('data/y_images/img_{}.npy'.format(i))
+    x_patches = patch_transform(ximg)
+    y_patches = patch_transform(yimg)
+    ximg, yimg = nonzero_filter(x_patches, y_patches)
+    if len(ximg.shape) < 3:
+        ximg = ximg.unsqueeze(0)
+        yimg = yimg.unsqueeze(0)   
+    ximg = ximg/255
+    yimg[yimg==255] = 9
+    ximg = torch.constant_pad_nd(ximg, (4,4,4,4), value=0)
+    yimg = torch.constant_pad_nd(yimg, (4,4,4,4), value=0)
+    all_x_imgs.append(ximg)
+    all_y_imgs.append(yimg)
+
+x_images = torch.cat(all_x_imgs, dim=0)
+y_images = torch.cat(all_y_imgs, dim=0)
+print(x_images.shape, y_images.shape)
+
+np.save('data/x_images.npy', np.expand_dims(x_images.detach().numpy(), -1))
+np.save('data/y_images.npy', np.expand_dims(y_images.detach().numpy(), -1))
